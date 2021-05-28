@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "fastapi-starter"
+version = "0.1.0"
+description = "Backend starter with fastapi, sqlalchemy,"
+authors = ["Alec Fong <alec@brev.dev>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.65.1"
+varname = "^0.6.4"
+uvicorn = "^0.13.4"
+pydantic = { version = "^1.8.2", extras = ["email", "typing_extensions", "dotenv"] }
+requests = "^2.25.1"
+backoff = "^1.10.0"
+shortuuid = "^1.0.1"
+alembic = "^1.6.5"
+SQLAlchemy = "^1.4.15"
+sqlakeyset = "^1.0.1616300210"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+black = { version = "^21.5b1", allow-prereleases = true }
+mypy = "^0.812"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

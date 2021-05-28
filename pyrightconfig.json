@@ -1,0 +1,81 @@
+{
+  "reportOptionalSubscript": true,
+
+  "reportOptionalMemberAccess": true,
+
+  "reportFunctionMemberAccess": true,
+
+  "reportOptionalCall": true,
+
+  "reportOptionalIterable": true,
+
+  "reportOptionalContextManager": true,
+
+  "reportOptionalOperand": true,
+
+  "strictListInference": true,
+
+  "strictDictionaryInference": true,
+
+  "reportConstantRedefinition": "error",
+
+  "reportIncompatibleMethodOverride": "error",
+
+  "reportIncompatibleVariableOverride": "error",
+
+  "reportDuplicateImport": "error",
+
+  "reportGeneralTypeIssues": "error",
+
+  "reportMissingImports": "error",
+
+  "reportImplicitStringConcatenation": "error",
+
+  "reportSelfClsParameterName": "error",
+
+  "reportWildcardImportFromLibrary": "error",
+
+  "reportUndefinedVariable": "error",
+
+  "reportUnboundVariable": "error",
+
+  "reportUnknownParameterType": "warning",
+
+  "reportUnknownArgumentType": "warning",
+
+  "reportUnknownLambdaType": "warning",
+
+  "reportMissingTypeArgument": "warning",
+
+  "reportUnnecessaryIsInstance": "warning",
+
+  "reportUnnecessaryCast": "warning",
+
+  "reportAssertAlwaysTrue": "warning",
+
+  "reportUnknownVariableType": "warning",
+
+  "reportUnknownMemberType": "warning",
+
+  "reportUntypedFunctionDecorator": "warning",
+
+  "reportUntypedClassDecorator": "warning",
+
+  "reportUntypedBaseClass": "warning",
+
+  "reportUntypedNamedTuple": "warning",
+
+  "reportPrivateUsage": "warning",
+
+  "reportImportCycles": "warning",
+
+  "reportUnusedImport": "warning",
+
+  "reportUnusedClass": "warning",
+
+  "reportUnusedFunction": "warning",
+
+  "reportUnusedVariable": "warning",
+
+  "reportUnusedCallResult": "warning"
+}
