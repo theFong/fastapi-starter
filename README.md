@@ -16,13 +16,13 @@
 - [x] formatting
 - [x] auto api docs
 - [x] sql database
-- [ ] migrations
-- [ ] prefix ids
-- [ ] cron jobs
+- [x] migrations
+- [x] prefix ids
+- [ ] pagination
 - [ ] async/background tasks
+- [ ] cron jobs
 - [ ] authentication
 - [ ] authorization
-- [ ] pagination
 
 ## Recommended Extensions
 
