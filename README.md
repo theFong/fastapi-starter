@@ -3,8 +3,8 @@
 ## Run
 
 1. poetry install
-2. make upgrade_db
-3. make run
+2. make upgrade_db env=local.env
+3. make run env=local.env
 4. open http://localhost:8000/docs
 
 ## Features
