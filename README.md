@@ -24,6 +24,6 @@
 - [ ] authentication
 - [ ] authorization
 
-## Recommended Extensions
+## Recommended VSCode Extensions
 
 - [SQLite](https://marketplace.visualstudio.com/items?itemName=alexcvzz.vscode-sqlite)
