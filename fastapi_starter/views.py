@@ -34,9 +34,9 @@ def get_users(
 
 @users.get("/{user_id}", response_model=UserResp)
 def get_user_by_id(
-    id: models.UserId, db_session: database.Session = Depends(database.use_session)
+    user_id: models.UserId, db_session: database.Session = Depends(database.use_session)
 ):
-    user = models.User.get_by_id(id=id, db_session=db_session)
+    user = models.User.get_by_id(id=user_id, db_session=db_session)
     if user is None:
         raise exceptions.HTTPException(400, "User does not exist")
     return user
@@ -55,15 +55,17 @@ def create_user(
 
 @users.put("/{user_id}", response_model=UserResp)
 def update_user_by_id(
-    id: models.UserId,
+    user_id: models.UserId,
     update_attrs: models.UserUpdateAttrs,
     db_session: database.Session = Depends(database.use_session),
 ):
     change_set = models.User.update(attrs=update_attrs)
 
     with utils.handle_constraint_error(), db_session.begin():
-        db_session.query(models.User).filter(models.User.id == id).update(change_set)
-        user = models.User.get_by_id(id=id, db_session=db_session)
+        db_session.query(models.User).filter(models.User.id == user_id).update(
+            change_set
+        )
+        user = models.User.get_by_id(id=user_id, db_session=db_session)
         if user is None:
             raise exceptions.HTTPException(400, "User does not exist")
         return user
@@ -71,11 +73,11 @@ def update_user_by_id(
 
 @users.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user_by_id(
-    id: models.UserId,
+    user_id: models.UserId,
     db_session: database.Session = Depends(database.use_session),
 ):
     with utils.handle_constraint_error(), db_session.begin():
-        res = db_session.query(models.User).filter(models.User.id == id).delete()
+        res = db_session.query(models.User).filter(models.User.id == user_id).delete()
         if res == 0:
             raise exceptions.HTTPException(400, "User does not exist")
     return Response(status_code=status.HTTP_204_NO_CONTENT)

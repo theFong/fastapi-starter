@@ -31,6 +31,7 @@ class UserUpdateAttrs(BaseIO):
 
 
 class User(Base):
+    __versioned__ = {}  # hooks up versioning
     __tablename__ = "Users"
 
     id: UserId = cast(UserId, Column(String(50), primary_key=True, unique=True))

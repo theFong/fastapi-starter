@@ -1,6 +1,7 @@
 import pydantic
 import sqlalchemy
 from fastapi_starter.pagination import PaginationKey, PaginationParams
+
 import functools
 from typing import (
     Any,
@@ -22,6 +23,7 @@ from sqlalchemy import create_engine
 import sqlalchemy.sql.elements
 from sqlalchemy.ext.declarative import declarative_base
 import sqlakeyset
+from sqlalchemy_continuum import make_versioned
 
 from fastapi_starter import config
 
@@ -38,6 +40,13 @@ def use_session() -> Iterator[Session]:
     engine = get_engine()
     with Session(engine) as session:  # type: ignore
         yield session
+
+
+make_versioned(user_cls=None)  # must call before any models inited
+
+
+def setup_models():
+    sqlalchemy.orm.configure_mappers()
 
 
 Base = declarative_base()
