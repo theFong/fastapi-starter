@@ -1,12 +1,8 @@
 from datetime import datetime
-from sqlalchemy import util
 
-from sqlalchemy.sql.expression import update
-from sqlalchemy.sql.functions import user
 from starlette.responses import Response
 from fastapi_starter import pagination
-from typing import List
-from pydantic import BaseModel, EmailStr
+from pydantic import EmailStr
 from fastapi import APIRouter, Depends, status, exceptions
 
 from . import database
@@ -17,7 +13,7 @@ from . import utils
 users = APIRouter(prefix="/users", tags=["Users"])
 
 
-class UserResp(database.IOBase):
+class UserResp(database.BaseIO):
     id: models.UserId
     name: str
     email: EmailStr
@@ -80,6 +76,6 @@ def delete_user_by_id(
 ):
     with utils.handle_constraint_error(), db_session.begin():
         res = db_session.query(models.User).filter(models.User.id == id).delete()
-        if res ==0:
+        if res == 0:
             raise exceptions.HTTPException(400, "User does not exist")
     return Response(status_code=status.HTTP_204_NO_CONTENT)

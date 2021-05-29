@@ -13,19 +13,19 @@ from sqlalchemy.orm import relationship
 from pydantic import EmailStr
 from .prefix_id import PrefixId
 from . import utils
-from .database import Base, ChangeSet, Filters, Page, IOBase
+from .database import Base, ChangeSet, Filters, Page, BaseIO
 
 
 class UserId(PrefixId):
     prefix = "user"
 
 
-class UserCreateAttrs(IOBase):
+class UserCreateAttrs(BaseIO):
     name: str
     email: EmailStr
 
 
-class UserUpdateAttrs(IOBase):
+class UserUpdateAttrs(BaseIO):
     name: Optional[str]
     email: Optional[EmailStr]
 

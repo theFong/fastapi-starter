@@ -92,14 +92,14 @@ def paginate(
             yield it
 
 
-class Filter(sqlalchemy.sql.elements.BinaryExpression):
+class Filter(sqlalchemy.sql.elements.BinaryExpression):  # type: ignore
     ...
 
 
 Filters = Iterable[Filter]
 
 
-class IOBase(pydantic.BaseModel):
+class BaseIO(pydantic.BaseModel):
     class Config:
         orm_mode = True
 

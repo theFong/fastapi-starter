@@ -1,4 +1,4 @@
-# Fastapi Starter
+# FastAPI Starter
 
 ## Run
 
@@ -34,6 +34,8 @@ Note: [You will need to fix non-null changed attributes manually](https://medium
 - [ ] authentication
 - [ ] authorization
 - [ ] relations
+- [ ] object versioning/audit
+- [ ] api versioning
 
 ## Recommended VSCode Extensions
 
