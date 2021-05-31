@@ -18,7 +18,7 @@ Note: [You will need to fix non-null changed attributes manually](https://medium
 
 ## Features
 
-- [x] Config
+- [x] Config management
 - [x] Logging
 - [x] vscode debugger
 - [x] linting
@@ -34,12 +34,14 @@ Note: [You will need to fix non-null changed attributes manually](https://medium
 - [ ] authentication
 - [ ] authorization
 - [ ] relations
+- [ ] secrets management
 - [x] object versioning/audit
 - [ ] api versioning
 - [ ] Unit testing
 - [ ] Hypothesis testing
 - [ ] Codecov
 - [ ] Tour
+- [ ] Templateable
 
 ## Recommended VSCode Extensions
 

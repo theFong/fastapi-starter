@@ -5,14 +5,6 @@ import sys
 import varname
 import logging
 
-logging.basicConfig(
-    format="[%(levelname)s] [%(name)s] [%(filename)s:%(lineno)d] %(asctime)s %(message)s ",
-    level=logging.INFO,
-)
-logging.StreamHandler(sys.stdout)
-logger = logging.getLogger(str(varname.nameof(fastapi_starter)))
-logger.setLevel(logging.DEBUG)
-
 
 class Config(pydantic.BaseSettings):
     debug: bool = True
@@ -26,3 +18,13 @@ def get_config():
 
 
 get_config()
+
+
+logging.basicConfig(
+    format="[%(levelname)s] [%(name)s] [%(filename)s:%(lineno)d] %(asctime)s %(message)s ",
+    level=logging.INFO,
+)
+logging.StreamHandler(sys.stdout)
+logger = logging.getLogger(str(varname.nameof(fastapi_starter)))
+level = logging.DEBUG if get_config().debug else logging.INFO
+logger.setLevel(level)
