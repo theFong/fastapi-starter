@@ -55,19 +55,16 @@ class User(Base):
             update_date=now,
         )
 
-    @classmethod
-    def update(cls, *, attrs: UserUpdateAttrs) -> ChangeSet:
+    def update(self, *, attrs: UserUpdateAttrs):
         update = False
-        change_set = {}
         if attrs.name != None:
             update = True
-            change_set[varname.nameof(cls.name)] = attrs.name
+            self.name = attrs.name
         if attrs.email != None:
             update = True
-            change_set[varname.nameof(cls.email)] = attrs.email
+            self.email = attrs.email
         if update:
-            change_set[varname.nameof(cls.update_date)] = utils.get_utc_now()
-        return change_set
+            self.update_date = utils.get_utc_now()
 
     @classmethod
     def get_by_id(cls, *, id: UserId, db_session: database.Session):

@@ -59,16 +59,12 @@ def update_user_by_id(
     update_attrs: models.UserUpdateAttrs,
     db_session: database.Session = Depends(database.use_session),
 ):
-    change_set = models.User.update(attrs=update_attrs)
-
     with utils.handle_constraint_error(), db_session.begin():
-        db_session.query(models.User).filter(models.User.id == user_id).update(
-            change_set
-        )
         user = models.User.get_by_id(id=user_id, db_session=db_session)
         if user is None:
             raise exceptions.HTTPException(400, "User does not exist")
-        return user
+        user.update(attrs=update_attrs)
+    return user
 
 
 @users.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -77,7 +73,8 @@ def delete_user_by_id(
     db_session: database.Session = Depends(database.use_session),
 ):
     with utils.handle_constraint_error(), db_session.begin():
-        res = db_session.query(models.User).filter(models.User.id == user_id).delete()
-        if res == 0:
+        user = get_user_by_id(user_id=user_id, db_session=db_session)
+        if user is None:
             raise exceptions.HTTPException(400, "User does not exist")
+        db_session.delete(user)
     return Response(status_code=status.HTTP_204_NO_CONTENT)

@@ -34,8 +34,12 @@ Note: [You will need to fix non-null changed attributes manually](https://medium
 - [ ] authentication
 - [ ] authorization
 - [ ] relations
-- [ ] object versioning/audit
+- [x] object versioning/audit
 - [ ] api versioning
+- [ ] Unit testing
+- [ ] Hypothesis testing
+- [ ] Codecov
+- [ ] Tour
 
 ## Recommended VSCode Extensions
 
