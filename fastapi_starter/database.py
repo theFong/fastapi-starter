@@ -34,10 +34,10 @@ def get_engine():
         config.get_config().db_dsn.get_secret_value(),
         native_datetime=True,
         echo=config.get_config().debug,
-        pool_size=5,
-        max_overflow=2,
-        pool_timeout=30,
-        pool_recycle=1800,
+        # pool_size=5,
+        # max_overflow=2,
+        # pool_timeout=30,
+        # pool_recycle=1800,
     )
     return engine
 
@@ -117,6 +117,3 @@ Filters = Iterable[Filter]
 class BaseIO(pydantic.BaseModel):
     class Config:
         orm_mode = True
-
-
-ChangeSet = Dict[Union[str, Tuple[str]], Any]

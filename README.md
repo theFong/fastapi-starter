@@ -35,13 +35,21 @@ Note: [You will need to fix non-null changed attributes manually](https://medium
 - [ ] authorization
 - [ ] relations
 - [ ] secrets management
+- [ ] Endpoint rate limiting
+- [ ] API consumption retry
 - [x] object versioning/audit
 - [ ] api versioning
 - [ ] Unit testing
-- [ ] Hypothesis testing
+- [ ] Hypothesis/property testing
 - [ ] Codecov
 - [ ] Tour
 - [ ] Templateable
+- [ ] Request ID
+- [ ] Request ID corelating
+- [ ] Idempotency key
+- [ ] Profiling
+- [ ] async database
+- [ ] Audit by
 
 ## Recommended VSCode Extensions
 

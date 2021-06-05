@@ -1,19 +1,22 @@
 import uuid
+from sqlalchemy.sql.elements import ColumnElement
 
 import varname
 from fastapi_starter import database
 from fastapi_starter.pagination import PaginationParams
 from typing import (
+    Generic,
     Optional,
+    TypeVar,
     cast,
 )
-from sqlalchemy import Column, DateTime, ForeignKey, String
+from sqlalchemy import Column, DateTime, ForeignKey, String, util
 from sqlalchemy.orm import relationship
 
 from pydantic import EmailStr
 from .prefix_id import PrefixId
 from . import utils
-from .database import Base, ChangeSet, Filters, Page, BaseIO
+from .database import Base, Filters, Page, BaseIO
 
 
 class UserId(PrefixId):
@@ -30,41 +33,62 @@ class UserUpdateAttrs(BaseIO):
     email: Optional[EmailStr]
 
 
-class User(Base):
+class AuditWhenMixin:
+    created_at = Column(DateTime(True), nullable=False, default=utils.get_utc_now)
+    updated_at = Column(DateTime(True), nullable=False, onupdate=utils.get_utc_now)
+
+
+class AuditByMixin:
+    created_by = Column(DateTime(True), nullable=False, default=utils.get_utc_now)
+    updated_by = Column(String(50), nullable=False)
+    update_request = Column(String(50), nullable=False)
+
+
+class AuditMixin(AuditWhenMixin, AuditByMixin):
+    ...
+
+
+I = TypeVar("I", bound=PrefixId)
+
+
+class IdMixin(Generic[I]):
+    id: I = cast(I, Column(String(50), primary_key=True, unique=True))
+
+
+def make_user_audit_id(user_id: UserId, type: str = "self"):
+    return f"{type}:{user_id}"
+
+
+class User(AuditMixin, IdMixin[UserId], Base):
     __versioned__ = {}  # hooks up versioning
     __tablename__ = "Users"
 
-    id: UserId = cast(UserId, Column(String(50), primary_key=True, unique=True))
     name = Column(String(50), nullable=False)
     email = Column(String(50), nullable=False, unique=True)
-    create_date = Column(DateTime(True), nullable=False)
-    update_date = Column(DateTime(True), nullable=False)
     secret = Column(String(50), nullable=False)
 
     @classmethod
-    def create(cls, *, attrs: UserCreateAttrs):
+    def create(cls, *, attrs: UserCreateAttrs, request_id: str):
         id = UserId.make()
-        now = utils.get_utc_now()
         secret = str(uuid.uuid4())
         return cls(
             id=id,
             name=attrs.name,
             email=attrs.email,
-            create_date=now,
             secret=secret,
-            update_date=now,
+            created_by=make_user_audit_id(id),
+            updated_by=make_user_audit_id(id),
+            update_request=request_id,
         )
 
-    def update(self, *, attrs: UserUpdateAttrs):
-        update = False
+    def update(self, *, attrs: UserUpdateAttrs, request_id: str, updated_by: str):
         if attrs.name != None:
-            update = True
             self.name = attrs.name
         if attrs.email != None:
-            update = True
             self.email = attrs.email
-        if update:
-            self.update_date = utils.get_utc_now()
+
+        self.update_request = request_id
+        self.updated_by = updated_by
 
     @classmethod
     def get_by_id(cls, *, id: UserId, db_session: database.Session):
@@ -77,9 +101,9 @@ class User(Base):
         *,
         pagination_params: PaginationParams,
         filters: Filters,
-        db_session: database.Session
+        db_session: database.Session,
     ) -> Page["User"]:
-        q = db_session.query(cls).filter(*filters).order_by(cls.create_date, cls.id)
+        q = db_session.query(cls).filter(*filters).order_by(cls.created_at, cls.id)
         page, prev_page, next_page = database.page_query_results(q, pagination_params)
         return Page(prev_key=prev_page, items=page, next_key=next_page)
 
