@@ -48,7 +48,7 @@ def create_user(
     db_session: database.Session = Depends(database.use_session),
 ):
     with utils.handle_constraint_error(), db_session.begin():
-        user = models.User.create(attrs=create_attrs)
+        user = models.User.create(attrs=create_attrs, request_id="")
         db_session.add(user)
     return user
 
@@ -63,7 +63,7 @@ def update_user_by_id(
         user = models.User.get_by_id(id=user_id, db_session=db_session)
         if user is None:
             raise exceptions.HTTPException(400, "User does not exist")
-        user.update(attrs=update_attrs)
+        user.update(attrs=update_attrs, request_id="", updated_by=user.id)
     return user
 
 
