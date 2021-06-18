@@ -17,6 +17,7 @@ alembic = "^1.6.5"
 SQLAlchemy = "^1.4.15"
 sqlakeyset = "^1.0.1616300210"
 sqlalchemy-continuum = {git = "https://github.com/theFong/sqlalchemy-continuum"}
+starlette-context = "^0.3.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

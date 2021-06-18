@@ -1,9 +1,9 @@
 import functools
-import fastapi_starter
 import pydantic
-import sys
-import varname
 import logging
+import fastapi_starter.log
+import varname
+import fastapi_starter
 
 
 class Config(pydantic.BaseSettings):
@@ -19,12 +19,8 @@ def get_config():
 
 get_config()
 
+fastapi_starter.log.setup_logger(get_config().debug)
 
-logging.basicConfig(
-    format="[%(levelname)s] [%(name)s] [%(filename)s:%(lineno)d] %(asctime)s %(message)s ",
-    level=logging.INFO,
-)
-logging.StreamHandler(sys.stdout)
 logger = logging.getLogger(str(varname.nameof(fastapi_starter)))
-level = logging.DEBUG if get_config().debug else logging.INFO
-logger.setLevel(level)
+
+logger.info(get_config())
