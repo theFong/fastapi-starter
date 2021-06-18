@@ -36,10 +36,11 @@ class UserUpdateAttrs(BaseIO):
 class AuditWhenMixin:
     created_at = Column(DateTime(True), nullable=False, default=utils.get_utc_now)
     updated_at = Column(DateTime(True), nullable=False, onupdate=utils.get_utc_now)
+    deleted_at = Column(DateTime(True), nullable=True)
 
 
 class AuditByMixin:
-    created_by = Column(DateTime(True), nullable=False, default=utils.get_utc_now)
+    created_by = Column(String(True), nullable=False, default=utils.get_utc_now)
     updated_by = Column(String(50), nullable=False)
     update_request = Column(String(50), nullable=False)
 
@@ -71,6 +72,7 @@ class User(AuditMixin, IdMixin[UserId], Base):
     def create(cls, *, attrs: UserCreateAttrs, request_id: str):
         id = UserId.make()
         secret = str(uuid.uuid4())
+        now = utils.get_utc_now()
         return cls(
             id=id,
             name=attrs.name,
@@ -79,6 +81,8 @@ class User(AuditMixin, IdMixin[UserId], Base):
             created_by=make_user_audit_id(id),
             updated_by=make_user_audit_id(id),
             update_request=request_id,
+            updated_at=now,
+            created_at=now,
         )
 
     def update(self, *, attrs: UserUpdateAttrs, request_id: str, updated_by: str):
@@ -88,7 +92,8 @@ class User(AuditMixin, IdMixin[UserId], Base):
             self.email = attrs.email
 
         self.update_request = request_id
-        self.updated_by = updated_by
+        self.updated_by = make_user_audit_id(self.id)
+        self.updated_at = utils.get_utc_now()
 
     @classmethod
     def get_by_id(cls, *, id: UserId, db_session: database.Session):
@@ -112,3 +117,9 @@ class User(AuditMixin, IdMixin[UserId], Base):
         if email is None:
             return []
         return [cls.email == email]  # type: ignore
+
+    def delete(self, request_id: str):
+        self.updated_by = make_user_audit_id(self.id)
+        self.update_request = request_id
+        self.deleted_at = utils.get_utc_now()
+        self.updated_at = utils.get_utc_now()

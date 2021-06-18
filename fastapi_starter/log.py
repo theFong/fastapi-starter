@@ -17,7 +17,6 @@ def setup_logger(debug: bool = True):
     syslog.addFilter(IdsFilter())
 
     formatter = logging.Formatter(
-        # "%(asctime)s %(process)s %(request_id)s %(correlation_id)s %(levelname)s %(name)s %(message)s"
         "[%(levelname)s] [%(name)s] [%(filename)s:%(lineno)d] %(process)s %(asctime)s %(request_id)s %(correlation_id)s %(message)s ",
     )
 

@@ -1,8 +1,8 @@
 """init
 
-Revision ID: fa4caf0a7217
+Revision ID: 9c08bdc2c8bd
 Revises: 
-Create Date: 2021-06-05 00:03:01.610354
+Create Date: 2021-06-18 00:09:53.179609
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'fa4caf0a7217'
+revision = '9c08bdc2c8bd'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,6 +21,7 @@ def upgrade():
     op.create_table('Users',
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('created_by', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_by', sa.String(length=50), nullable=False),
     sa.Column('update_request', sa.String(length=50), nullable=False),
@@ -35,6 +36,7 @@ def upgrade():
     op.create_table('Users_version',
     sa.Column('created_at', sa.DateTime(timezone=True), autoincrement=False, nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), autoincrement=False, nullable=False),
+    sa.Column('deleted_at', sa.DateTime(timezone=True), autoincrement=False, nullable=True),
     sa.Column('created_by', sa.DateTime(timezone=True), autoincrement=False, nullable=False),
     sa.Column('updated_by', sa.String(length=50), autoincrement=False, nullable=False),
     sa.Column('update_request', sa.String(length=50), autoincrement=False, nullable=False),

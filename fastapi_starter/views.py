@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, status, exceptions
 from . import database
 from . import models
 from . import utils
+from . import log
 
 
 users = APIRouter(prefix="/users", tags=["Users"])
@@ -17,8 +18,8 @@ class UserResp(database.BaseIO):
     id: models.UserId
     name: str
     email: EmailStr
-    create_date: datetime
-    update_date: datetime
+    created_at: datetime
+    updated_at: datetime
 
 
 @users.get("", response_model=pagination.PageResponse[UserResp])
@@ -48,7 +49,9 @@ def create_user(
     db_session: database.Session = Depends(database.use_session),
 ):
     with utils.handle_constraint_error(), db_session.begin():
-        user = models.User.create(attrs=create_attrs, request_id="")
+        req_id = log.get_request_id()
+        assert req_id is not None
+        user = models.User.create(attrs=create_attrs, request_id=req_id)
         db_session.add(user)
     return user
 
@@ -63,7 +66,9 @@ def update_user_by_id(
         user = models.User.get_by_id(id=user_id, db_session=db_session)
         if user is None:
             raise exceptions.HTTPException(400, "User does not exist")
-        user.update(attrs=update_attrs, request_id="", updated_by=user.id)
+        req_id = log.get_request_id()
+        assert req_id is not None
+        user.update(attrs=update_attrs, request_id=req_id, updated_by=user.id)
     return user
 
 
@@ -76,5 +81,8 @@ def delete_user_by_id(
         user = get_user_by_id(user_id=user_id, db_session=db_session)
         if user is None:
             raise exceptions.HTTPException(400, "User does not exist")
+        req_id = log.get_request_id()
+        assert req_id is not None
+        user.delete(req_id)
         db_session.delete(user)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
